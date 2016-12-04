@@ -1,11 +1,11 @@
 # Discord self bot
-Discord self bot is an easy to use interface that provides a selfbot programmed in the c# language.
+Discord self bot is an easy to use interface that provides a self bot programmed in the c# language.
 
-You simply run the program enter your user token and press connect, the application will then go to the background and you can execute commands in difrent channels and guilds.
+You simply run the program enter your user token and press connect, the application will then go to the background and you can execute commands in diferent channels. The self bot only responds to you other people that execute commands are ignored, like a self bot should work.
 
 The bot is a work in progress and uses the Discord.Net library see https://discord.foxbot.me/docs/index.html for more information.
 
-License
+## License
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
