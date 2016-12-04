@@ -16,10 +16,8 @@ along with Foobar.  If not, see<http://www.gnu.org/licenses/>.
 */
 
 
-using System.Reflection;
 using System.Threading.Tasks;
 using Discord.Commands;
-using Discord.WebSocket;
 
 namespace DiscordSelfBot
 {
@@ -32,7 +30,6 @@ namespace DiscordSelfBot
         [Command("say"), Summary("Echos a message.")]
         public async Task Say([Summary("The text to echo")] string echo)
         {
-            if(Context.User.Id == Context.Client.CurrentUser.Id)
             // ReplyAsync is a method on ModuleBase
                 await ReplyAsync(echo);
         }

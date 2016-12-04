@@ -113,7 +113,7 @@ namespace DiscordSelfBot
         {
             // Don't process the command if it was a System Message
             var message = messageParam as SocketUserMessage;
-            if (message == null) return;
+            if (message == null || message.Author.Id != message.Discord.CurrentUser.Id) return;
             // Create a number to track where the prefix ends and the command begins
             int argPos = 0;
             // Determine if the message is a command, based on if it starts with '!' or a mention prefix
