@@ -22,16 +22,17 @@ using Discord.Commands;
 namespace DiscordSelfBot
 {
     /// <summary>
-    /// This class contains the commands for the self bot
+    ///     This class contains the commands for the self bot
     /// </summary>
     public class Commands : ModuleBase
     {
         // ~say hello -> hello
-        [Command("say"), Summary("Echos a message.")]
+        [Command("say")]
+        [Summary("Echos a message.")]
         public async Task Say([Summary("The text to echo")] string echo)
         {
             // ReplyAsync is a method on ModuleBase
-                await ReplyAsync(echo);
+            await ReplyAsync(echo);
         }
     }
 }

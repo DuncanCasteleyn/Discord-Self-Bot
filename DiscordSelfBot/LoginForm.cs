@@ -21,15 +21,16 @@ using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
 using Discord;
-using Discord.WebSocket;
 using DiscordSelfBot.Properties;
 
 namespace DiscordSelfBot
 {
     public partial class LoginForm : Form
     {
+        private bool _exceptionThrown;
+
         /// <summary>
-        /// Intializes the form
+        ///     Intializes the form
         /// </summary>
         public LoginForm()
         {
@@ -37,72 +38,88 @@ namespace DiscordSelfBot
         }
 
         /// <summary>
-        /// This method is called when the connect button is pressed, if the connection was successfull the application will move itself to the background.
+        ///     This method is called when the connect button is pressed, if the connection was successfull the application will
+        ///     move itself to the background.
         /// </summary>
         /// <param name="sender">the object the called this method</param>
         /// <param name="e">event arguments</param>
-        private void connectButton_Click(object sender, System.EventArgs e)
+        private void connectButton_Click(object sender, EventArgs e)
         {
             connectButton.Enabled = false;
-            Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            config.AppSettings.Settings["Token"].Value = this.tokenBox.Text;
+            var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            config.AppSettings.Settings["Token"].Value = tokenBox.Text;
             config.Save(ConfigurationSaveMode.Modified);
             ConfigurationManager.RefreshSection("appSettings");
-            this.Update();
-            SelfBot selfBot = new SelfBot(tokenBox.Text, this);
-            DiscordSocketClient discordClient = selfBot.Start();
+            Update();
+            var selfBot = new SelfBot(tokenBox.Text, this);
+            var discordClient = selfBot.Start();
             uint count = 0;
             connectButton.TextAlign = ContentAlignment.MiddleLeft;
             do
             {
                 connectButton.Text = Resources.LoginForm_connectButton_Click_Connecting_waitState1;
-                this.Update();
+                Update();
                 Thread.Sleep(333);
                 connectButton.Text = Resources.LoginForm_connectButton_Click_Connecting_waitState2;
-                this.Update();
+                Update();
                 Thread.Sleep(333);
                 connectButton.Text = Resources.LoginForm_connectButton_Click_Connecting_waitState3;
-                this.Update();
+                Update();
                 Thread.Sleep(334);
                 count++;
-            } while (count < 5 || discordClient.ConnectionState == ConnectionState.Connecting && count < 15); 
+            } while ((count < 5) || ((discordClient.ConnectionState == ConnectionState.Connecting) && (count < 15)));
             //only check connectionstate after 5 seconds for slower computers/networks
 
             if (discordClient.ConnectionState == ConnectionState.Connected)
             {
-                this.Hide();
+                Hide();
                 notifyIcon.Visible = true;
                 notifyIcon.ShowBalloonTip(500);
-                MessageBox.Show(Resources.LoginForm_loginOk, this.Text, MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                MessageBox.Show(Resources.LoginForm_loginOk, Text, MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+            }
+            else if (_exceptionThrown)
+            {
+                ConnectionFailed(selfBot);
+                _exceptionThrown = false;
             }
             else
             {
-                selfBot.Dispose();
-                connectButton.Text = Resources.LoginForm_connectButton_Click_Connect;
-                connectButton.TextAlign = ContentAlignment.MiddleCenter;
-                connectButton.Enabled = true;
-                MessageBox.Show(Resources.LoginForm_loginNotOk, this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ConnectionFailed(selfBot);
+                MessageBox.Show(Resources.LoginForm_loginNotOk, Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         /// <summary>
-        /// This method closes the application and cleans up
+        ///     Clean up the client that is given as parameter
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void exitToolStripMenuItem_Click(object sender, System.EventArgs e)
+        /// <param name="selfBot">Client to clean</param>
+        private void ConnectionFailed(SelfBot selfBot)
         {
-            notifyIcon.Visible = false;
-            this.Dispose();
+            selfBot.Dispose();
+            connectButton.Text = Resources.LoginForm_connectButton_Click_Connect;
+            connectButton.TextAlign = ContentAlignment.MiddleCenter;
+            connectButton.Enabled = true;
         }
 
         /// <summary>
-        /// Exceptions from everything that is run from this form should be thrown here so the user is informed.
+        ///     This method closes the application and cleans up
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            notifyIcon.Visible = false;
+            Dispose();
+        }
+
+        /// <summary>
+        ///     Exceptions from everything that is run from this form should be thrown here so the user is informed.
         /// </summary>
         /// <param name="e">An exception to notify the user about.</param>
         internal void ExceptionNotifier(Exception e)
         {
-            MessageBox.Show(e.GetType().Name + @": " + e.Message, this.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            _exceptionThrown = true;
+            MessageBox.Show(e.GetType().Name + @": " + e.Message, Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
     }
 }
