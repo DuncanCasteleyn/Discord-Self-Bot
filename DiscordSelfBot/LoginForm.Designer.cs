@@ -15,6 +15,8 @@ You should have received a copy of the GNU General Public License
 along with Discord self bot.  If not, see<http://www.gnu.org/licenses/>.
 */
 
+using System.Configuration;
+
 namespace DiscordSelfBot
 {
     partial class LoginForm
@@ -104,6 +106,8 @@ namespace DiscordSelfBot
             this.tokenBox.Name = "tokenBox";
             this.tokenBox.Size = new System.Drawing.Size(168, 20);
             this.tokenBox.TabIndex = 3;
+            Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            this.tokenBox.Text = config.AppSettings.Settings["Token"].Value;
             this.tokenBox.UseSystemPasswordChar = true;
             // 
             // LoginForm

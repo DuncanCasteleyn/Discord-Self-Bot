@@ -28,14 +28,14 @@ namespace DiscordSelfBot
     /// <summary>
     /// This class is used to create a self bot.
     /// </summary>
-    class SelfBot
+    class SelfBot : IDisposable
     {
         private readonly string _token;
-        private DiscordSocketClient _client;
-        private Thread _selfBotThread;
         private readonly LoginForm _callback;
         private readonly DependencyMap _map;
         private readonly CommandService _commands;
+        private DiscordSocketClient _client;
+        private Thread _selfBotThread;
 
         /// <summary>
         /// Constructor of this class
@@ -44,7 +44,8 @@ namespace DiscordSelfBot
         /// <param name="callback">The loginForm that created this object</param>
         public SelfBot(string token, LoginForm callback)
         {
-            _callback = callback;
+            this._selfBotThread = null;
+            this._callback = callback;
             this._map = new DependencyMap();
             this._commands = new CommandService();
             this._token = token;
@@ -57,17 +58,9 @@ namespace DiscordSelfBot
         public DiscordSocketClient Start()
         {
             _client = new DiscordSocketClient();
-            _selfBotThread = new Thread(Run) {IsBackground = true};
+            _selfBotThread = new Thread(Run) { IsBackground = true };
             _selfBotThread.Start();
             return _client;
-        }
-
-        /// <summary>
-        /// Stopts the bot so it can be garbage collected later.
-        /// </summary>
-        public async void Stop()
-        {
-            await _client.DisconnectAsync();
         }
 
         /// <summary>
@@ -76,8 +69,6 @@ namespace DiscordSelfBot
         /// <see cref="LoginForm"/>
         public async void Run()
         {
-            await InstallCommands();
-
             try
             {
                 // Configure the client to use a Bot token, and use our token
@@ -85,6 +76,9 @@ namespace DiscordSelfBot
 
                 // Connect the client to Discord's gateway
                 await _client.ConnectAsync();
+
+                //activate commands
+                await InstallCommands();
             }
             catch (Exception e)
             {
@@ -126,6 +120,18 @@ namespace DiscordSelfBot
             var result = await _commands.ExecuteAsync(context, argPos, _map);
             if (!result.IsSuccess)
                 await message.Channel.SendMessageAsync(result.ErrorReason);
+        }
+
+        /// <summary>
+        /// Disposes of the discord client
+        /// </summary>
+        public async void Dispose()
+        {
+            await _client.DisconnectAsync();
+            _client.Dispose();
+            this._client = null;
+            this._selfBotThread = null;
+            GC.SuppressFinalize(this);
         }
     }
 }

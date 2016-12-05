@@ -16,6 +16,7 @@ along with Discord self bot.  If not, see<http://www.gnu.org/licenses/>.
 */
 
 using System;
+using System.Configuration;
 using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
@@ -43,6 +44,10 @@ namespace DiscordSelfBot
         private void connectButton_Click(object sender, System.EventArgs e)
         {
             connectButton.Enabled = false;
+            Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            config.AppSettings.Settings["Token"].Value = this.tokenBox.Text;
+            config.Save(ConfigurationSaveMode.Modified);
+            ConfigurationManager.RefreshSection("appSettings");
             this.Update();
             SelfBot selfBot = new SelfBot(tokenBox.Text, this);
             DiscordSocketClient discordClient = selfBot.Start();
@@ -60,7 +65,9 @@ namespace DiscordSelfBot
                 this.Update();
                 Thread.Sleep(334);
                 count++;
-            } while (discordClient.ConnectionState == ConnectionState.Connecting && count < 15);
+            } while (count < 5 || discordClient.ConnectionState == ConnectionState.Connecting && count < 15); 
+            //only check connectionstate after 5 seconds for slower computers/networks
+
             if (discordClient.ConnectionState == ConnectionState.Connected)
             {
                 this.Hide();
@@ -70,7 +77,7 @@ namespace DiscordSelfBot
             }
             else
             {
-                selfBot.Stop();
+                selfBot.Dispose();
                 connectButton.Text = Resources.LoginForm_connectButton_Click_Connect;
                 connectButton.TextAlign = ContentAlignment.MiddleCenter;
                 connectButton.Enabled = true;
