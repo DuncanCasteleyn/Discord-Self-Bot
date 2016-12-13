@@ -37,7 +37,7 @@ namespace DiscordSelfBot
             InitializeComponent();
             try
             {
-                using (var conn = new SQLiteConnection($@"Data Source={System.Environment.GetEnvironmentVariable("appdata")}\discord\Local Storage\https_discordapp.com_0.localstorage;Version=3;"))
+                using (var conn = new SQLiteConnection($@"Data Source={Environment.GetEnvironmentVariable("appdata")}\discord\Local Storage\https_discordapp.com_0.localstorage;Version=3;"))
                 {
                     using (var cmd = conn.CreateCommand())
                     {
