@@ -106,8 +106,6 @@ namespace DiscordSelfBot
             this.tokenBox.Name = "tokenBox";
             this.tokenBox.Size = new System.Drawing.Size(168, 20);
             this.tokenBox.TabIndex = 3;
-            Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            this.tokenBox.Text = config.AppSettings.Settings["Token"].Value;
             this.tokenBox.UseSystemPasswordChar = true;
             // 
             // LoginForm
