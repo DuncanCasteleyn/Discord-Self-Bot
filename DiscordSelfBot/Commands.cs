@@ -34,15 +34,17 @@ namespace DiscordSelfBot
         {
             // ReplyAsync is a method on ModuleBase
             await ReplyAsync(echo);
+            await Context.Message.DeleteAsync();
         }
 
         [Command("userinfo"), Summary("Returns info about the current user, or the user parameter, if one passed.")]
         [Alias("user", "whois")]
         public async Task UserInfo([Summary("The guild member to get info for")] IGuildUser userInfo)
         {
-                await ReplyAsync($"{userInfo.Username}#{userInfo.Discriminator}:\n" +
-                                 $"Account created at {userInfo.CreatedAt}\n" +
-                                 $"Joined this guild at {userInfo.JoinedAt}");
+            await ReplyAsync($"{userInfo.Username}#{userInfo.Discriminator}:\n" +
+                             $"Account created at {userInfo.CreatedAt}\n" +
+                             $"Joined this guild at {userInfo.JoinedAt}");
+            await Context.Message.DeleteAsync();
         }
     }
 }

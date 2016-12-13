@@ -16,7 +16,6 @@ along with Discord self bot.  If not, see<http://www.gnu.org/licenses/>.
 */
 
 using System;
-using System.Configuration;
 using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
@@ -54,7 +53,7 @@ namespace DiscordSelfBot
                     }
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 MessageBox.Show(Resources.LoginForm_Retrieving_token_failed, Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
