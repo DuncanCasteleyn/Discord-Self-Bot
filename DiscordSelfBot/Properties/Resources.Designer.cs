@@ -113,5 +113,24 @@ namespace DiscordSelfBot.Properties {
                 return ResourceManager.GetString("LoginForm_loginOk", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Retrieving your token from the Discord client failed.
+        ///You will have to insert your token manually..
+        /// </summary>
+        internal static string LoginForm_Retrieving_token_failed {
+            get {
+                return ResourceManager.GetString("LoginForm_Retrieving_token_failed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your token was automaticly retrieved from the Discord client..
+        /// </summary>
+        internal static string LoginForm_Token_retrieved {
+            get {
+                return ResourceManager.GetString("LoginForm_Token_retrieved", resourceCulture);
+            }
+        }
     }
 }

@@ -36,20 +36,27 @@ namespace DiscordSelfBot
         public LoginForm()
         {
             InitializeComponent();
-            using (var conn = new SQLiteConnection($@"Data Source={System.Environment.GetEnvironmentVariable("appdata")}\discord\Local Storage\https_discordapp.com_0.localstorage;Version=3;"))
+            try
             {
-                using (var cmd = conn.CreateCommand())
+                using (var conn = new SQLiteConnection($@"Data Source={System.Environment.GetEnvironmentVariable("appdata")}\discord\Local Storage\https_discordapp.com_0.localstorage;Version=3;"))
                 {
-                    conn.Open();
-                    cmd.CommandText = @"SELECT key, value FROM ItemTable where key = ""token""";
-                    using (var reader = cmd.ExecuteReader())
+                    using (var cmd = conn.CreateCommand())
                     {
-                        while (reader.Read())
+                        conn.Open();
+                        cmd.CommandText = @"SELECT key, value FROM ItemTable where key = ""token""";
+                        using (var reader = cmd.ExecuteReader())
                         {
-                            tokenBox.Text = reader.GetString(reader.GetOrdinal("value")).Trim('"');
+                            while (reader.Read())
+                            {
+                                tokenBox.Text = reader.GetString(reader.GetOrdinal("value")).Trim('"');
+                            }
                         }
                     }
                 }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(Resources.LoginForm_Retrieving_token_failed, Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 

@@ -135,4 +135,11 @@
   <data name="LoginForm_connectButton_Click_Connect" xml:space="preserve">
     <value>Connect</value>
   </data>
+  <data name="LoginForm_Retrieving_token_failed" xml:space="preserve">
+    <value>Retrieving your token from the Discord client failed.
+You will have to insert your token manually.</value>
+  </data>
+  <data name="LoginForm_Token_retrieved" xml:space="preserve">
+    <value>Your token was automaticly retrieved from the Discord client.</value>
+  </data>
 </root>
