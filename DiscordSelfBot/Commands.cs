@@ -40,7 +40,8 @@ namespace DiscordSelfBot
         [Alias("user", "whois")]
         public async Task UserInfo([Summary("The guild member to get info for")] IGuildUser userInfo)
         {
-                await ReplyAsync($"{userInfo.Username}#{userInfo.Discriminator}: {userInfo.CreatedAt}\n" +
+                await ReplyAsync($"{userInfo.Username}#{userInfo.Discriminator}:\n" +
+                                 $"Account created at {userInfo.CreatedAt}\n" +
                                  $"Joined this guild at {userInfo.JoinedAt}");
         }
     }

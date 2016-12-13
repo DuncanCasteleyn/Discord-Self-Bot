@@ -62,10 +62,6 @@ namespace DiscordSelfBot
         private void connectButton_Click(object sender, EventArgs e)
         {
             connectButton.Enabled = false;
-            var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            config.AppSettings.Settings["Token"].Value = tokenBox.Text;
-            config.Save(ConfigurationSaveMode.Modified);
-            ConfigurationManager.RefreshSection("appSettings");
             Update();
             var selfBot = new SelfBot(tokenBox.Text, this);
             var discordClient = selfBot.Start();
