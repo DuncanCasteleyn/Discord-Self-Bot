@@ -17,6 +17,7 @@ along with Discord self bot.  If not, see<http://www.gnu.org/licenses/>.
 
 
 using System.Threading.Tasks;
+using Discord;
 using Discord.Commands;
 
 namespace DiscordSelfBot
@@ -33,6 +34,14 @@ namespace DiscordSelfBot
         {
             // ReplyAsync is a method on ModuleBase
             await ReplyAsync(echo);
+        }
+
+        [Command("userinfo"), Summary("Returns info about the current user, or the user parameter, if one passed.")]
+        [Alias("user", "whois")]
+        public async Task UserInfo([Summary("The (optional) user to get info for")] IGuildUser userInfo)
+        {
+                await ReplyAsync($"{userInfo.Username}#{userInfo.Discriminator}: {userInfo.CreatedAt} \n" +
+                                 $"Joined this guild at {userInfo.JoinedAt}");
         }
     }
 }

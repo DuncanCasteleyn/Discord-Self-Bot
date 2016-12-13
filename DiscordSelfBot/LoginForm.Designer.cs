@@ -19,7 +19,7 @@ using System.Configuration;
 
 namespace DiscordSelfBot
 {
-    internal partial class LoginForm
+    internal sealed partial class LoginForm
     {
         /// <summary>
         /// Required designer variable.

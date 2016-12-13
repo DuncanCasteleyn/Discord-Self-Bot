@@ -25,14 +25,14 @@ using DiscordSelfBot.Properties;
 
 namespace DiscordSelfBot
 {
-    internal partial class LoginForm : Form
+    internal sealed partial class LoginForm : Form
     {
         private bool _exceptionThrown;
 
         /// <summary>
         ///     Intializes the form
         /// </summary>
-        protected internal LoginForm()
+        public LoginForm()
         {
             InitializeComponent();
         }
@@ -116,7 +116,7 @@ namespace DiscordSelfBot
         ///     Exceptions from everything that is run from this form should be thrown here so the user is informed.
         /// </summary>
         /// <param name="e">An exception to notify the user about.</param>
-        internal void ExceptionNotifier(Exception e)
+        public void ExceptionNotifier(Exception e)
         {
             _exceptionThrown = true;
             MessageBox.Show(e.GetType().Name + @": " + e.Message, Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
