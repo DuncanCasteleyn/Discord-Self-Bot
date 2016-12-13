@@ -25,14 +25,14 @@ using DiscordSelfBot.Properties;
 
 namespace DiscordSelfBot
 {
-    public partial class LoginForm : Form
+    internal partial class LoginForm : Form
     {
         private bool _exceptionThrown;
 
         /// <summary>
         ///     Intializes the form
         /// </summary>
-        public LoginForm()
+        protected internal LoginForm()
         {
             InitializeComponent();
         }

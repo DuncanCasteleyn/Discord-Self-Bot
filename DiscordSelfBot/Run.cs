@@ -20,7 +20,7 @@ using System.Windows.Forms;
 
 namespace DiscordSelfBot
 {
-    internal abstract class Run
+    internal sealed class Run
     {
         /// <summary>
         ///     The main entry point for the application.

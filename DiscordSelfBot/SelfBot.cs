@@ -35,7 +35,6 @@ namespace DiscordSelfBot
         private readonly DependencyMap _map;
         private readonly string _token;
         private DiscordSocketClient _client;
-        private Thread _selfBotThread;
 
         /// <summary>
         ///     Constructor of this class
@@ -44,7 +43,6 @@ namespace DiscordSelfBot
         /// <param name="callback">The loginForm that created this object</param>
         public SelfBot(string token, LoginForm callback)
         {
-            _selfBotThread = null;
             _callback = callback;
             _map = new DependencyMap();
             _commands = new CommandService();
@@ -59,7 +57,6 @@ namespace DiscordSelfBot
             await _client.DisconnectAsync();
             _client.Dispose();
             _client = null;
-            _selfBotThread = null;
             GC.SuppressFinalize(this);
         }
 
@@ -70,8 +67,7 @@ namespace DiscordSelfBot
         public DiscordSocketClient Start()
         {
             _client = new DiscordSocketClient();
-            _selfBotThread = new Thread(Run) {IsBackground = true};
-            _selfBotThread.Start();
+            new Thread(Run) {IsBackground = true}.Start();
             return _client;
         }
 
